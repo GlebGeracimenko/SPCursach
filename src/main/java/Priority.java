@@ -24,5 +24,6 @@ public class Priority {
     public static final int RIGHT_PARENTHESIS = 19;
     public static final int SEMICOLON = 20;
 
+    public static final int MAX_PRIORITY = 21;
 
 }
