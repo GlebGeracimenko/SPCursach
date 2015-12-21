@@ -12,6 +12,7 @@ public class TreeNode {
     public static void getTree(String line) {
         buildTree1(line);
         mainParent(tree);
+        refactor(line);
     }
 
     private static void buildTree(String line) {
