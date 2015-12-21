@@ -14,15 +14,11 @@ public class MapTermanal {
     static {
         mapSymbolTerminal.put(">", Priority.MORE);
         mapSymbolTerminal.put("<", Priority.LESS);
-
         mapSymbolTerminal.put("=", Priority.EQUALS);
-
         mapSymbolTerminal.put("/", Priority.DIVISION);
         mapSymbolTerminal.put("*", Priority.MULTIPLY);
-
         mapSymbolTerminal.put("-", Priority.MINUS);
         mapSymbolTerminal.put("+", Priority.PLUS);
-
         mapSymbolTerminal.put("while", Priority.WHILE);
         mapSymbolTerminal.put("for", Priority.FOR);
         mapSymbolTerminal.put("if", Priority.IF);
@@ -35,20 +31,14 @@ public class MapTermanal {
         mapSymbolTerminal.put("int", Priority.INT);
         mapSymbolTerminal.put("Math.sqrt", Priority.SQRT);
         mapSymbolTerminal.put("()", Priority.PARENTHESIS);
-        //mapSymbolTerminal.put(")", Priority.RIGHT_PARENTHESIS);
-        mapSymbolTerminal.put(";", Priority.SEMICOLON);
 /////////////////////////////////////////////////////////////////////
         mapTerminalSymbol.put(Priority.MORE, ">");
         mapTerminalSymbol.put(Priority.LESS, "<");
-
         mapTerminalSymbol.put(Priority.EQUALS, "=");
-
         mapTerminalSymbol.put(Priority.DIVISION, "/");
         mapTerminalSymbol.put(Priority.MULTIPLY, "*");
-
         mapTerminalSymbol.put(Priority.MINUS, "-");
         mapTerminalSymbol.put(Priority.PLUS, "+");
-
         mapTerminalSymbol.put(Priority.WHILE, "while");
         mapTerminalSymbol.put(Priority.FOR, "for");
         mapTerminalSymbol.put(Priority.IF, "if");
@@ -60,11 +50,5 @@ public class MapTermanal {
         mapTerminalSymbol.put(Priority.DOUBLE, "Double");
         mapTerminalSymbol.put(Priority.INT, "int");
         mapTerminalSymbol.put(Priority.SQRT, "Math.sqrt");
-        //mapTerminalSymbol.put(Priority.LEFT_PARENTHESIS, "(");
-        mapTerminalSymbol.put(Priority.RIGHT_PARENTHESIS, ")");
-        mapTerminalSymbol.put(Priority.SEMICOLON, ";");
-
     }
-
-
 }
