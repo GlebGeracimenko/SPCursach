@@ -5,24 +5,54 @@ import java.util.ArrayList;
  */
 public class SplitString {
 
-    static String tempString;
 
-    public SplitString(String tempString) {
-        this.tempString = tempString;
-    }
+    public void tokenazer(String tempString) {
 
-    static char[] masChar = tempString.toCharArray();
+        String  newName = tempString.replaceAll(" ", "");
 
-    static ArrayList<Character> listSymbol = new ArrayList<Character>();
+        char[] masElements = newName.toCharArray();
+        String temp = "";
+        boolean m = false;
 
-    static {
-        for (int i = 0; i < masChar.length; i++) {
+        ArrayList<String> commands = new ArrayList<String>();
+        ArrayList<String> commandsFinal = new ArrayList<String>();
 
-            if(masChar[i] != ' ') {
-                listSymbol.add(masChar[i]);
+        for (int i = 0; i < masElements.length; i++) {
+
+            if(String.valueOf(masElements[i]).equals("(") | String.valueOf(masElements[i]).equals(")")
+                    | String.valueOf(masElements[i]).equals("-") | String.valueOf(masElements[i]).equals("[") | String.valueOf(masElements[i]).equals("]")
+                    | String.valueOf(masElements[i]).equals("*") | String.valueOf(masElements[i]).equals("=") | String.valueOf(masElements[i]).equals(";")) {
+
+                if(m == true) commands.add(temp);
+                m = false;
+                temp = "";
+                String s = "";
+
+                if (String.valueOf(masElements[i]).equals(";")) {
+                    commands.add(String.valueOf(masElements[i]));
+                } else {
+                    if (String.valueOf(masElements[i + 1]).equals("-") | String.valueOf(masElements[i]).equals("+")) {
+                        s = String.valueOf(masElements[i]) + String.valueOf(masElements[i + 1]);
+                        commands.add(s);
+                        i++;
+                    } else {
+                        commands.add(String.valueOf(masElements[i]));
+                    }
+                }
+
+            } else {
+                temp += String.valueOf(masElements[i]);
+                m = true;
+
             }
+
         }
 
+        for (int i = 0; i < commands.size(); i++) {
+            String x = commands.get(i) + " ";
+            commandsFinal.add(x);
+            System.out.print(commandsFinal.get(i));
+        }
     }
 
 
