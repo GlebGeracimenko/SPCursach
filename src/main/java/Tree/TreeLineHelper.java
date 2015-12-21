@@ -1,4 +1,4 @@
-package Tree;
+package tree;
 
 /**
  * Created by Gleb Geracimenko on 21.12.2015.

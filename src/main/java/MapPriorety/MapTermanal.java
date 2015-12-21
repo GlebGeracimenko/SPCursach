@@ -1,4 +1,4 @@
-package MapPriorety;
+package mapPriorety;
 
 import java.util.HashMap;
 import java.util.Map;
