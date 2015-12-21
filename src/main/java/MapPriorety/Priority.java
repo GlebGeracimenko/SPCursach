@@ -1,9 +1,11 @@
+package MapPriorety;
+
 /**
  * Created by bogdan on 16.12.2015.
  */
 public class Priority {
 
-    public static final int LEFT_PARENTHESIS = 18;
+    public static final int PARENTHESIS = 18;
     public static final int RIGHT_PARENTHESIS = 19;
 
     public static final int MORE = 9;
@@ -14,6 +16,8 @@ public class Priority {
 
     public static final int MINUS = 11;
     public static final int PLUS = 12;
+
+    public static final int EQUALS = 2;
 
     public static final int WHILE = 3;
     public static final int FOR = 4;
@@ -29,6 +33,6 @@ public class Priority {
     public static final int SQRT = 21;
     public static final int SEMICOLON = 22;
 
-    public static final int MAX_PRIORITY = 23;
+    public static final int MAX_PRIORITY = 22;
 
 }
