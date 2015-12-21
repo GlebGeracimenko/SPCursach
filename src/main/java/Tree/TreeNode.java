@@ -130,4 +130,29 @@ public class TreeNode {
             showTree(node.getParent());
     }
 
+    public static String refactor(String line) {
+
+        String  newName = line.replaceAll(" ", "");
+        String temp = "";
+        boolean prinak = false;
+
+        char [] mas = newName.toCharArray();
+
+        for (int i = 0; i < mas.length; i++) {
+            if(String.valueOf(mas[i]).equals("(")) {
+                prinak = true;
+
+                if (String.valueOf(mas[i]).equals(")")) {
+                    prinak = false;
+                }
+            } else {
+                if(prinak == true){
+                    temp += String.valueOf(mas[i]);
+                }
+            }
+        }
+
+        return temp;
+    }
+
 }
