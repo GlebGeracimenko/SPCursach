@@ -16,7 +16,7 @@ public class Test {
 //        String [] linesAsArray = lines.toArray(new String[linewrite(l, s);
 
 
-//        TreeNode.getTree(s);
+        TreeNode.getTree("d = (e + 34 + 1) * 2 * sv;");
 //        Node node = TreeNode.tree;
 //        System.out.prin     }
     }

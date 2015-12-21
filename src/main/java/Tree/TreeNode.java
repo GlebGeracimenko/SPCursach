@@ -2,6 +2,8 @@ package Tree;
 
 import MapPriorety.MapTermanal;
 
+import java.util.StringTokenizer;
+
 /**
  * Created by Gleb Geracimenko on 16.12.2015.
  */
@@ -13,6 +15,7 @@ public class TreeNode {
         buildTree1(line);
         mainParent(tree);
         refactor(line);
+        refactorBrackets(line);
     }
 
     private static void buildTree(String line) {
@@ -132,28 +135,30 @@ public class TreeNode {
     }
 
     public static String refactor(String line) {
+        StringTokenizer tokenizer = new StringTokenizer(line, "(");
 
-        String  newName = line.replaceAll(" ", "");
-        String temp = "";
-        boolean prinak = false;
+        String token1 = tokenizer.nextToken();
+        String token2 = tokenizer.nextToken();
 
-        char [] mas = newName.toCharArray();
+        StringTokenizer tokenizer1 = new StringTokenizer(token2, ")");
+        String token3 = tokenizer1.nextToken();
+        String token4 = tokenizer1.nextToken();
 
-        for (int i = 0; i < mas.length; i++) {
-            if(String.valueOf(mas[i]).equals("(")) {
-                prinak = true;
+        return token4;
+    }
 
-                if (String.valueOf(mas[i]).equals(")")) {
-                    prinak = false;
-                }
-            } else {
-                if(prinak == true){
-                    temp += String.valueOf(mas[i]);
-                }
-            }
-        }
+    public static String refactorBrackets(String line) {
 
-        return temp;
+        StringTokenizer tokenizer = new StringTokenizer(line, "(");
+
+        String token1 = tokenizer.nextToken();
+        String token2 = tokenizer.nextToken();
+
+        StringTokenizer tokenizer1 = new StringTokenizer(token2, ")");
+        String token3 = tokenizer1.nextToken();
+        String token4 = tokenizer1.nextToken();
+
+        return token1 + token2 + token3 + token4;
     }
 
 }
