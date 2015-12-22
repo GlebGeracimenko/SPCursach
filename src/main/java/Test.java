@@ -1,6 +1,3 @@
-import Tree.Node;
-import Tree.TreeNode;
-
 import java.io.*;
 
 /**
@@ -16,7 +13,7 @@ public class Test {
 //        String [] linesAsArray = lines.toArray(new String[linewrite(l, s);
 
 
-        TreeNode.getTree("d = (e + 34 + 1) * 2 * sv;");
+//        TreeNode.getTree("d = (e + 34 + 1) * 2 * sv;");
 //        Node node = TreeNode.tree;
 //        System.out.prin     }
     }

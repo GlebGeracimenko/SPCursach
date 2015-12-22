@@ -51,7 +51,7 @@ public class SplitString {
         String x = "";
 
         for (int i = 0; i < commands.size(); i++) {
-            if (i != 10) {
+            if (i != commands.size() - 2) {
                 x += commands.get(i) + " ";
             } else {
                 x += commands.get(i);
