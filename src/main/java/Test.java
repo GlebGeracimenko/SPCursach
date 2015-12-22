@@ -1,4 +1,4 @@
-import Tree.Node;
+import tree.Iterator;
 import Tree.TreeNode;
 
 /**
@@ -8,10 +8,13 @@ public class Test {
 
 
     public static void main(String[] args) throws IOException {
-        String s = "dad = b - asdb - 4234 * a * 2;";
+        String s = "d = 10 + 130 - 4 * 8 * 2";
         new IORefactor().scanFile("txt.pas");
-
-//        String [] linesAsArray = lines.toArray(new String[linewrite(l, s);
+        Node node = TreeNode.root;
+        Iterator iterator = TreeNode.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next().getValue());
+        }
 
 
 //        TreeNode.getTree("d = (e + 34 + 1) * 2 * sv;");
