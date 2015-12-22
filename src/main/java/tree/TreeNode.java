@@ -201,8 +201,23 @@ public class TreeNode {
 
         String rez = "";
 
-        private void rez(String s) {
-            rez = rez + s;
+        private String rez(String s) {
+            //rez = rez + s;
+            String mas[] = s.split(" ");
+            int k = Integer.parseInt(mas[0]);
+            int h = Integer.parseInt(mas[2]);
+            if (mas[1].equals("*")) {
+                s = new String(String.valueOf(k * h));
+            } else if (mas[1].equals("/")){
+                s = new String(String.valueOf(k / h));
+            } else if (mas[1].equals("+")) {
+                s = new String(String.valueOf(k + h));
+            } else if (mas[1].equals("-")) {
+                s = new String(String.valueOf(k - h));
+            } else {
+                s = null;
+            }
+            return s;
         }
 
         public boolean hasNext() {
@@ -214,12 +229,12 @@ public class TreeNode {
                 previous = node;
                 node = node.getRight() == null ? null : node.getRight();
                 if (node.getRight() == null && node.getLeft() == null) {
-                    rez(previous.getValue());
+                    rez += previous.getValue() + " ";
                     return previous;
                 }else {
                     node = previous.getParent();
                 }
-                rez(previous.getValue());
+                rez += previous.getValue() + " ";
                 return previous;
             }
             if (node.getRight() != null && previous != node.getRight()) {
@@ -237,15 +252,22 @@ public class TreeNode {
                 }
                 previous = node;
                 node = node.getParent();
-                rez(previous.getValue());
+                rez += previous.getValue() + " ";
                 return previous;
             }
             if (previous.getRight() == node && previous != null) {
                 Node node1 = node;
                 node = previous.getParent();
-                rez(node1.getValue());
-                previous = new Node(0, rez, node, null, null);
-                node.setLeft(previous);
+                rez += node1.getValue() + " ";
+                Node node2 = previous;
+
+                previous = new Node(0, rez = rez(rez.trim()) + " ", node, null, null);
+                if (node.getLeft() == node2) {
+                    node.setLeft(previous);
+                } else if (node.getRight() == node2) {
+                    rez = "";
+                    node.setRight(previous);
+                }
                 return node1;
             }
             return null;
