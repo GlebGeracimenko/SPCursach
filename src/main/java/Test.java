@@ -10,6 +10,10 @@ public class Test {
 
     public static void main(String[] args) {
         String s = "d = b + o - 4 * a - 2";
+        char c = '\u0030';
+        System.out.println(c);
+        c = '9';
+        System.out.println(c);
         TreeNode.getTree(s);
         Node node = TreeNode.root;
         Iterator iterator = TreeNode.iterator();
