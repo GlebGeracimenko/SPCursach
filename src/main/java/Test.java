@@ -9,11 +9,14 @@ public class Test {
 
 
     public static void main(String[] args) {
-        String s = "d = b + o - 4 * a * 2";
+        String s = "d = b + o - 4 * a - 2";
         TreeNode.getTree(s);
         Node node = TreeNode.root;
-        Node k = TreeNode.getLengthTree();
-        System.out.println(k.getValue());
+        Iterator iterator = TreeNode.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next().getValue());
+        }
+        System.out.println();
     }
 
 }
