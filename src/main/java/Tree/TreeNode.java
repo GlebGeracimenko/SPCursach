@@ -7,36 +7,36 @@ import mapPriorety.MapTermanal;
  */
 public class TreeNode {
 
-    public static Node tree = new Node();
+    public static Node root = new Node();
 
     public static void getTree(String line) {
         buildTree1(line);
-        mainParent(tree);
+        mainParent(root);
     }
 
     private static void buildTree(String line) {
         int index;
         if (line.indexOf("if") != -1) {
-            tree = new Node(MapTermanal.mapSymbolTerminal.get("()"), "()", null, null, null);
-            tree.setLeft(new Node(MapTermanal.mapSymbolTerminal.get("if"), "if", tree, null, null));
+            root = new Node(MapTermanal.mapSymbolTerminal.get("()"), "()", null, null, null);
+            root.setLeft(new Node(MapTermanal.mapSymbolTerminal.get("if"), "if", root, null, null));
             line = line.substring(line.indexOf("(") + 1, line.lastIndexOf(")"));
-            tree.setRight(new Node());
-            Node node = tree;
-            tree = tree.getRight();
-            tree.setParent(node);
+            root.setRight(new Node());
+            Node node = root;
+            root = root.getRight();
+            root.setParent(node);
             getTree(line);
         } else if ((index = line.indexOf("==")) != -1) {
-            tree = new Node(MapTermanal.mapSymbolTerminal.get("=="), "=="
-                    , tree.getParent() != null ? tree.getParent() : null, null, null);
-            if (tree.getParent() != null) {
-                tree.getParent().setRight(tree);
+            root = new Node(MapTermanal.mapSymbolTerminal.get("=="), "=="
+                    , root.getParent() != null ? root.getParent() : null, null, null);
+            if (root.getParent() != null) {
+                root.getParent().setRight(root);
             }
             String s = line.substring(0, index).trim();
-            tree.setLeft(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
-                    ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, tree, null, null));
+            root.setLeft(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
+                    ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, root, null, null));
             s = line.substring(index + 2, line.length()).trim();
-            tree.setRight(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
-                    ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, tree, null, null));
+            root.setRight(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
+                    ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, root, null, null));
         }
     }
 
@@ -46,13 +46,13 @@ public class TreeNode {
         Integer isEmpty = null;// MapTermanal.mapSymbolTerminal.get(isLine = line.substring(0, line.indexOf(" ")));
         if (isEmpty == null) {
             if ((index = line.indexOf("=")) != -1) {
-                tree = new Node(MapTermanal.mapSymbolTerminal.get("="), "=", null, null, null);
-                tree.setLeft(new Node(0, line.substring(0, index), tree, null, null));
+                root = new Node(MapTermanal.mapSymbolTerminal.get("="), "=", null, null, null);
+                root.setLeft(new Node(0, line.substring(0, index), root, null, null));
                 line = line.substring(index + 1, line.length()).trim();
-                tree.setRight(new Node());
-                Node node = tree;
-                tree = tree.getRight();
-                tree.setParent(node);
+                root.setRight(new Node());
+                Node node = root;
+                root = root.getRight();
+                root.setParent(node);
                 TreeLineHelper.FIRST_LINE = line;
                 buildTree1(line);
             }
@@ -66,81 +66,81 @@ public class TreeNode {
             }
             TreeLineHelper.CHECK = true;
 
-            tree = new Node(MapTermanal.mapSymbolTerminal.get(isLine), isLine, tree.getParent(), null, null);
-            String left = tree.getParent().getLeft() == null ? "" : tree.getParent().getLeft().getValue();
-            String right = tree.getParent().getRight() == null ? "" : tree.getParent().getRight().getValue();
+            root = new Node(MapTermanal.mapSymbolTerminal.get(isLine), isLine, root.getParent(), null, null);
+            String left = root.getParent().getLeft() == null ? "" : root.getParent().getLeft().getValue();
+            String right = root.getParent().getRight() == null ? "" : root.getParent().getRight().getValue();
             if (left == null || left.equals(line) || left.equals("")) {
-                tree.getParent().setLeft(tree);
+                root.getParent().setLeft(root);
             } else if (right == null || right.equals(line) || right.equals("")) {
-                tree.getParent().setRight(tree);
+                root.getParent().setRight(root);
             }
             String s = line.substring(0, line.indexOf(isLine)).trim();
-            tree.setLeft(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
-                    ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, tree, null, null));
-            Node node = tree;
-            tree = tree.getLeft();
-            tree.setParent(node);
+            root.setLeft(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
+                    ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, root, null, null));
+            Node node = root;
+            root = root.getLeft();
+            root.setParent(node);
             buildTree1(s);
-            while (!tree.getValue().equals(isLine))
-                tree = tree.getParent();
+            while (!root.getValue().equals(isLine))
+                root = root.getParent();
             s = line.substring(line.indexOf(isLine) + 1, line.length()).trim();
-            tree.setRight(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
-                    ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, tree, null, null));
-            node = tree;
-            tree = tree.getRight();
-            tree.setParent(node);
+            root.setRight(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
+                    ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, root, null, null));
+            node = root;
+            root = root.getRight();
+            root.setParent(node);
             buildTree1(s);
 //            if (isLine.equals("*") || isLine.equals("/")) {
 //                multPriorety(isLine, line);
 //            }
         } else {
-            tree = new Node(isEmpty, isLine,
-                    tree.getParent() != null ? tree.getParent() : null, null, null);
-            if (tree.getParent() != null) {
-                tree.getParent().setRight(tree);
+            root = new Node(isEmpty, isLine,
+                    root.getParent() != null ? root.getParent() : null, null, null);
+            if (root.getParent() != null) {
+                root.getParent().setRight(root);
             }
-            tree.setRight(new Node());
-            Node node = tree;
-            tree = tree.getRight();
-            tree.setParent(node);
+            root.setRight(new Node());
+            Node node = root;
+            root = root.getRight();
+            root.setParent(node);
             buildTree1(line.substring(line.indexOf(" "), line.length()).trim());
         }
     }
 
 //    private static void multPriorety(String value, String line) {
-//        tree = new Node(MapTermanal.mapSymbolTerminal.get(value), value,
-//                tree.getParent() != null ? tree.getParent() : null, null, null);
-//        if (tree.getParent() != null) {
-//            tree.getParent().setRight(tree);
+//        root = new Node(MapTermanal.mapSymbolTerminal.get(value), value,
+//                root.getParent() != null ? root.getParent() : null, null, null);
+//        if (root.getParent() != null) {
+//            root.getParent().setRight(root);
 //        }
 //        int index = line.indexOf(value);
 //        String s = line.substring(0, index).trim();
-//        tree.setLeft(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
-//                ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, tree, null, null));
+//        root.setLeft(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
+//                ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, root, null, null));
 //        line = line.substring(index + 1, line.length()).trim();
 //        String[] mas = line.split(" ");
 //        if (mas.length <= 1) {
-//            tree.setRight(new Node(MapTermanal.mapSymbolTerminal.get(line) == null
-//                    ? 0 : MapTermanal.mapSymbolTerminal.get(line), line, tree, null, null));
+//            root.setRight(new Node(MapTermanal.mapSymbolTerminal.get(line) == null
+//                    ? 0 : MapTermanal.mapSymbolTerminal.get(line), line, root, null, null));
 //            return;
 //        }
 //        if (!mas[1].equals(value)) {
-//            tree.setRight(new Node(MapTermanal.mapSymbolTerminal.get(mas[0]) == null
-//                    ? 0 : MapTermanal.mapSymbolTerminal.get(mas[0]), mas[0], tree, null, null));
-//            tree.getRight().setRight(new Node());
-//            Node node = tree.getRight();
-//            tree = tree.getRight().getRight();
-//            tree.setParent(node);
+//            root.setRight(new Node(MapTermanal.mapSymbolTerminal.get(mas[0]) == null
+//                    ? 0 : MapTermanal.mapSymbolTerminal.get(mas[0]), mas[0], root, null, null));
+//            root.getRight().setRight(new Node());
+//            Node node = root.getRight();
+//            root = root.getRight().getRight();
+//            root.setParent(node);
 //            StringBuilder builder = new StringBuilder();
 //            for (int i = 1; i < mas.length; i++) {
 //                builder.append(mas[i] + " ");
 //            }
 //            buildTree1(builder.toString());
 //        } else {
-//            tree.setRight(new Node());
-//            Node node = tree;
-//            tree = tree.getRight();
-//            tree.setParent(node);
+//            root.setRight(new Node());
+//            Node node = root;
+//            root = root.getRight();
+//            root.setParent(node);
 //            buildTree1(line);
 //        }
 //    }
@@ -149,7 +149,7 @@ public class TreeNode {
         if (node.getParent() != null) {
             mainParent(node.getParent());
         } else {
-            tree = node;
+            root = node;
             return;
         }
     }
@@ -176,6 +176,159 @@ public class TreeNode {
             }
         }
         return null;
+    }
+
+    public static Node getLengthTree() {
+        Iterator iterator = TreeNode.iterator();
+        while (iterator.hasNext()) {
+            iterator.next();
+        }
+        int length = iterator.getLength();
+        iterator = iterator();
+        iterator.setMaxLength(length);
+        return iterator.next1();
+    }
+
+    public static Iterator iterator() {
+        return new Iter();
+    }
+
+    private static class Iter implements Iterator {
+        Node node = root;
+        Node previous;
+        int treeLength = 0;
+        int maxLength = 0;
+
+        public boolean hasNext() {
+            return node != null;
+        }
+
+        public Node next() {
+            if (node.getRight() != null && previous != node.getRight()) {
+                node = node.getRight();
+                treeLength++;
+                if (treeLength > maxLength)
+                    maxLength = treeLength;
+                return next();
+            } else {
+                if (node.getLeft() != null) {
+                    treeLength++;
+                    if (treeLength > maxLength)
+                        maxLength = treeLength;
+                    previous = node;
+                    node = node.getLeft();
+                    return previous;
+                } else {
+                    previous = node;
+                    Node node1 = null;
+                    if (previous.getLeft() == null && previous.getRight() == null) {
+                        node1 = previous;
+                        while (node.getParent() != null && node.getParent().getLeft() == node1) {
+                            treeLength--;
+                            node = node.getParent();
+                            node1 = node1.getParent();
+                        }
+                    }
+                    treeLength--;
+                    node = node.getParent();
+                    if (node != null && (node.getLeft() != previous || node.getRight() != previous)) {
+                        Node previous1 = previous;
+                        previous = node1;
+                        return previous1;
+                    }
+                    return previous;
+                }
+            }
+        }
+
+        @Override
+        public Node next1() {
+            if (node.getRight() != null && previous != node.getRight()) {
+                node = node.getRight();
+                maxLength--;
+                if (maxLength == 0)
+                    return node;
+                else
+                    return next1();
+            } else {
+                if (node.getLeft() != null) {
+                    maxLength--;
+                    previous = node;
+                    node = node.getLeft();
+                    if (maxLength == 0)
+                        return node;
+                    else
+                        return next1();
+                } else {
+                    previous = node;
+                    Node node1 = null;
+                    if (previous.getLeft() == null && previous.getRight() == null) {
+                        node1 = previous;
+                        while (node.getParent() != null && node.getParent().getLeft() == node1) {
+                            maxLength++;
+                            node = node.getParent();
+                            node1 = node1.getParent();
+                        }
+                    }
+                    maxLength++;
+                    node = node.getParent();
+                    if (node != null && (node.getLeft() != previous || node.getRight() != previous)) {
+                        Node previous1 = previous;
+                        previous = node1;
+                        if (maxLength == 0)
+                            return node;
+                        else
+                            return next1();
+                    }
+                    if (maxLength == 0)
+                        return node;
+                    else
+                        return next1();
+                }
+
+            }
+            //return new Node();
+        }
+
+        @Override
+        public int getLength() {
+            return maxLength;
+        }
+
+        @Override
+        public void setMaxLength(int maxLength) {
+            this.maxLength = maxLength;
+        }
+
+        //        if (node.getRight() != null && previous != node.getRight()) {
+//            node = node.getRight();
+//            return next();
+//        } else {
+//            if (node.getLeft() != null) {
+//                previous = node;
+//                node = node.getLeft();
+//                return previous;
+//            } else {
+//                previous = node;
+//                Node node1 = null;
+//                if (previous.getLeft() == null && previous.getRight() == null) {
+//                    node1 = previous;
+//                    while (node.getParent() != null && node.getParent().getLeft() == node1) {
+//                        node = node.getParent();
+//                        node1 = node1.getParent();
+//                    }
+//                }
+//                node = node.getParent();
+//                if (node != null && (node.getLeft() != previous || node.getRight() != previous)) {
+//                    Node previous1 = previous;
+//                    previous = node1;
+//                    return previous1;
+//                }
+//                return previous;
+//            }
+//
+//        }
+
     }
 
 //    public static void showTree(Node node) {

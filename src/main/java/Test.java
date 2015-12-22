@@ -1,3 +1,4 @@
+import tree.Iterator;
 import tree.Node;
 import tree.TreeNode;
 
@@ -8,10 +9,11 @@ public class Test {
 
 
     public static void main(String[] args) {
-        String s = "d = b + o - 4 * a - 2";
+        String s = "d = b + o - 4 * a * 2";
         TreeNode.getTree(s);
-        Node node = TreeNode.tree;
-        System.out.println();
+        Node node = TreeNode.root;
+        Node k = TreeNode.getLengthTree();
+        System.out.println(k.getValue());
     }
 
 }
