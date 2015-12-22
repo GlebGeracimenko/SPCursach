@@ -1,6 +1,6 @@
-package tree;
+package Tree;
 
-import mapPriorety.MapTermanal;
+import MapPriorety.MapTermanal;
 
 import java.util.StringTokenizer;
 
@@ -178,7 +178,10 @@ public class TreeNode {
             } else if (index2 < index1) {
                 return "/";
             }
+        }
+        return null;
     }
+
 
     public static String refactor(String line) {
         StringTokenizer tokenizer = new StringTokenizer(line, "(");
@@ -205,8 +208,6 @@ public class TreeNode {
         String token4 = tokenizer1.nextToken();
 
         return token1 + token2 + token3 + token4;
-        }
-        return null;
     }
 
 //    public static void showTree(Node node) {

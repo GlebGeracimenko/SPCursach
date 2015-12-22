@@ -1,4 +1,4 @@
-package mapPriorety;
+package MapPriorety;
 
 /**
  * Created by bogdan on 16.12.2015.
