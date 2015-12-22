@@ -8,6 +8,7 @@ import mapPriorety.MapTermanal;
 public class TreeNode {
 
     public static Node root = new Node();
+    private static int rootIndex = -2;
 
     public static void getTree(String line) {
         buildTree1(line);
@@ -90,9 +91,6 @@ public class TreeNode {
             root = root.getRight();
             root.setParent(node);
             buildTree1(s);
-//            if (isLine.equals("*") || isLine.equals("/")) {
-//                multPriorety(isLine, line);
-//            }
         } else {
             root = new Node(isEmpty, isLine,
                     root.getParent() != null ? root.getParent() : null, null, null);
@@ -156,6 +154,7 @@ public class TreeNode {
 
     private static String firstSymvol(String line) {
         //ignore
+
         int index1 = line.indexOf("-");
         index1 = index1 == -1 ? Integer.MAX_VALUE : index1;
         int index2 = line.indexOf("+");
@@ -178,16 +177,16 @@ public class TreeNode {
         return null;
     }
 
-    public static Node getLengthTree() {
-        Iterator iterator = TreeNode.iterator();
-        while (iterator.hasNext()) {
-            iterator.next();
-        }
-        int length = iterator.getLength();
-        iterator = iterator();
-        iterator.setMaxLength(length);
-        return iterator.next1();
-    }
+//    public static Node getLengthTree() {
+//        Iterator iterator = TreeNode.iterator();
+//        while (iterator.hasNext()) {
+//            iterator.next();
+//        }
+//        int length = iterator.getLength();
+//        iterator = iterator();
+//        iterator.setMaxLength(length);
+//        return iterator.next1();
+//    }
 
     public static Iterator iterator() {
         return new Iter();
@@ -196,13 +195,10 @@ public class TreeNode {
     private static class Iter implements Iterator {
         Node node = root;
         Node previous;
-        int treeLength = 0;
-        int maxLength = 0;
 
         String rez = "";
 
         private String rez(String s) {
-            //rez = rez + s;
             String mas[] = s.split(" ");
             int k = Integer.parseInt(mas[0]);
             int h = Integer.parseInt(mas[2]);
@@ -229,12 +225,12 @@ public class TreeNode {
                 previous = node;
                 node = node.getRight() == null ? null : node.getRight();
                 if (node.getRight() == null && node.getLeft() == null) {
-                    rez += previous.getValue() + " ";
+                    rez += previous.getValue().trim() + " ";
                     return previous;
                 }else {
                     node = previous.getParent();
                 }
-                rez += previous.getValue() + " ";
+                rez += previous.getValue().trim() + " ";
                 return previous;
             }
             if (node.getRight() != null && previous != node.getRight()) {
@@ -252,7 +248,7 @@ public class TreeNode {
                 }
                 previous = node;
                 node = node.getParent();
-                rez += previous.getValue() + " ";
+                rez += previous.getValue().trim() + " ";
                 return previous;
             }
             if (previous.getRight() == node && previous != null) {
@@ -351,64 +347,64 @@ public class TreeNode {
 //            }
 //        }
 
-        @Override
-        public Node next1() {
-            if (node.getRight() != null && previous != node.getRight()) {
-                node = node.getRight();
-                maxLength--;
-                if (maxLength == 0)
-                    return node;
-                else
-                    return next1();
-            } else {
-                if (node.getLeft() != null) {
-                    maxLength--;
-                    previous = node;
-                    node = node.getLeft();
-                    if (maxLength == 0)
-                        return node;
-                    else
-                        return next1();
-                } else {
-                    previous = node;
-                    Node node1 = null;
-                    if (previous.getLeft() == null && previous.getRight() == null) {
-                        node1 = previous;
-                        while (node.getParent() != null && node.getParent().getLeft() == node1) {
-                            maxLength++;
-                            node = node.getParent();
-                            node1 = node1.getParent();
-                        }
-                    }
-                    maxLength++;
-                    node = node.getParent();
-                    if (node != null && (node.getLeft() != previous || node.getRight() != previous)) {
-                        Node previous1 = previous;
-                        previous = node1;
-                        if (maxLength == 0)
-                            return node;
-                        else
-                            return next1();
-                    }
-                    if (maxLength == 0)
-                        return node;
-                    else
-                        return next1();
-                }
+//        @Override
+//        public Node next1() {
+//            if (node.getRight() != null && previous != node.getRight()) {
+//                node = node.getRight();
+//                maxLength--;
+//                if (maxLength == 0)
+//                    return node;
+//                else
+//                    return next1();
+//            } else {
+//                if (node.getLeft() != null) {
+//                    maxLength--;
+//                    previous = node;
+//                    node = node.getLeft();
+//                    if (maxLength == 0)
+//                        return node;
+//                    else
+//                        return next1();
+//                } else {
+//                    previous = node;
+//                    Node node1 = null;
+//                    if (previous.getLeft() == null && previous.getRight() == null) {
+//                        node1 = previous;
+//                        while (node.getParent() != null && node.getParent().getLeft() == node1) {
+//                            maxLength++;
+//                            node = node.getParent();
+//                            node1 = node1.getParent();
+//                        }
+//                    }
+//                    maxLength++;
+//                    node = node.getParent();
+//                    if (node != null && (node.getLeft() != previous || node.getRight() != previous)) {
+//                        Node previous1 = previous;
+//                        previous = node1;
+//                        if (maxLength == 0)
+//                            return node;
+//                        else
+//                            return next1();
+//                    }
+//                    if (maxLength == 0)
+//                        return node;
+//                    else
+//                        return next1();
+//                }
+//
+//            }
+//            //return new Node();
+//        }
 
-            }
-            //return new Node();
-        }
-
-        @Override
-        public int getLength() {
-            return maxLength;
-        }
-
-        @Override
-        public void setMaxLength(int maxLength) {
-            this.maxLength = maxLength;
-        }
+//        @Override
+//        public int getLength() {
+//            return maxLength;
+//        }
+//
+//        @Override
+//        public void setMaxLength(int maxLength) {
+//            this.maxLength = maxLength;
+//        }
 
         //        if (node.getRight() != null && previous != node.getRight()) {
 //            node = node.getRight();

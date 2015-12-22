@@ -7,16 +7,14 @@ import tree.TreeNode;
  */
 public class Test {
 
-
-    public static void main(String[] args) {
-        String s = "d = 10 + 130 - 4 * 8 * 2";
+    public static void main(String[] args) throws ClassNotFoundException {
+        String s = "int d = 10 + 130 - 4 * 8 * 2";
         TreeNode.getTree(s);
         Node node = TreeNode.root;
         Iterator iterator = TreeNode.iterator();
         while (iterator.hasNext()) {
             System.out.println(iterator.next().getValue());
         }
-        System.out.println();
     }
 
 }
