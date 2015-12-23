@@ -5,22 +5,22 @@ package table;
  */
 public class TableElement {
 
-    private Class aClass;
+    private int priorety;
     private String name;
     private Object value;
 
-    public TableElement(Class aClass, String name, Object value) {
-        this.aClass = aClass;
+    public TableElement(int priorety, String name, Object value) {
+        this.priorety = priorety;
         this.name = name;
         this.value = value;
     }
 
-    public Class getaClass() {
-        return aClass;
+    public int getPriorety() {
+        return priorety;
     }
 
-    public void setaClass(Class aClass) {
-        this.aClass = aClass;
+    public void setPriorety(int priorety) {
+        this.priorety = priorety;
     }
 
     public String getName() {

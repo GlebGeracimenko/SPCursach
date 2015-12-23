@@ -20,11 +20,14 @@ public class Priority {
     public static final int WHILE = 13;
     public static final int PLUS = 14;
     public static final int MINUS = 15;
+    public static final int LESS_EQUALS = 21;
     public static final int LESS = 16;
+    public static final int MORE_EQUALS = 22;
     public static final int MORE = 17;
     public static final int PARENTHESIS = 18;
     public static final int EQUALS = 19;
+    public static final int NOT_ASSIGNMENT = 23;
     public static final int ASSIGNMENT = 20;
-    public static final int MAX_PRIORITY = 21;
+    public static final int MAX_PRIORITY = 22;
 
 }

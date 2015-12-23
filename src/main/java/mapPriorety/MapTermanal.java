@@ -13,8 +13,12 @@ public class MapTermanal {
 
     static {
         mapSymbolTerminal.put(">", Priority.MORE);
+        mapSymbolTerminal.put(">=", Priority.MORE_EQUALS);
         mapSymbolTerminal.put("<", Priority.LESS);
+        mapSymbolTerminal.put("<=", Priority.LESS_EQUALS);
         mapSymbolTerminal.put("=", Priority.EQUALS);
+        mapSymbolTerminal.put("!=", Priority.NOT_ASSIGNMENT);
+        mapSymbolTerminal.put("==", Priority.ASSIGNMENT);
         mapSymbolTerminal.put("/", Priority.DIVISION);
         mapSymbolTerminal.put("*", Priority.MULTIPLY);
         mapSymbolTerminal.put("-", Priority.MINUS);

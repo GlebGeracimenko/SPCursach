@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class SplitString {
 
 
-    public ArrayList<String> tokenazer(String tempString) {
+    public String tokenazer(String tempString) {
 
         String  newName = tempString.replaceAll(" ", "");
 
@@ -48,13 +48,18 @@ public class SplitString {
 
         }
 
+        String x = "";
+
         for (int i = 0; i < commands.size(); i++) {
-            String x = commands.get(i) + " ";
-            commandsFinal.add(x);
-            System.out.print(commandsFinal.get(i));
+            if (i != commands.size() - 2) {
+                x += commands.get(i) + " ";
+            } else {
+                x += commands.get(i);
+            }
+            System.out.print(commands.get(i));
         }
 
-        return commandsFinal;
+        return x;
     }
 
 
