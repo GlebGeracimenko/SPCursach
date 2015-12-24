@@ -339,13 +339,17 @@ public class TreeNode {
         }
         String value;
         if (line.indexOf("Math.sqrt") != -1) {
-            int w = line.indexOf("Math.sqrt(") + 10;
-            value = line.substring(w, line.indexOf(")", w));
-            value = "(int)Math.sqrt(" + value + ")";
-            String arr[] = line.split(value);
-            line = "";
-            for (int i = 0; i < arr.length; i++) {
-                line += arr[i];
+            int w;
+            while ((w = line.indexOf("Math.sqrt(") + 10) >= 10) {
+                value = line.substring(w, line.indexOf(")", w));
+                value = "(int)Math.sqrt(" + value + ")";
+                String s = line.substring(0, line.indexOf(value));
+                String s1 = line.substring(line.indexOf(value) + value.length(), line.length());
+                String s2 = "";
+                for (int i = 0; i < value.length(); i++) {
+                    s2 += " ";
+                }
+                line = s + s2 + s1;
             }
         }
         char[] mas = line.toCharArray();
