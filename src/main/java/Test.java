@@ -17,7 +17,7 @@ public class Test {
             }
 
             TreeNode tree = new TreeNode();
-            tree.getTree(s.substring(0, s.length() - 1).trim());
+            tree.getTree(s.trim().substring(0, s.length() - 1).trim());
             Iterator iterator = tree.iterator();
             while (iterator.hasNext()) {
                 iterator.next();

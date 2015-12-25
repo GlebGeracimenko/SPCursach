@@ -9,7 +9,6 @@ import java.util.Map;
 public class MapTermanal {
 
     public static Map<String, Integer> mapSymbolTerminal = new HashMap<String, Integer>();
-    public static Map<Integer, String> mapTerminalSymbol = new HashMap<Integer, String>();
 
     static {
         mapSymbolTerminal.put(">", Priority.MORE);
@@ -35,24 +34,5 @@ public class MapTermanal {
         mapSymbolTerminal.put("int", Priority.INT);
         mapSymbolTerminal.put("Math.sqrt", Priority.SQRT);
         mapSymbolTerminal.put("()", Priority.PARENTHESIS);
-/////////////////////////////////////////////////////////////////////
-        mapTerminalSymbol.put(Priority.MORE, ">");
-        mapTerminalSymbol.put(Priority.LESS, "<");
-        mapTerminalSymbol.put(Priority.EQUALS, "=");
-        mapTerminalSymbol.put(Priority.DIVISION, "/");
-        mapTerminalSymbol.put(Priority.MULTIPLY, "*");
-        mapTerminalSymbol.put(Priority.MINUS, "-");
-        mapTerminalSymbol.put(Priority.PLUS, "+");
-        mapTerminalSymbol.put(Priority.WHILE, "while");
-        mapTerminalSymbol.put(Priority.FOR, "for");
-        mapTerminalSymbol.put(Priority.IF, "if");
-        mapTerminalSymbol.put(Priority.ELSE, "else");
-        mapTerminalSymbol.put(Priority.TRUE, "true");
-        mapTerminalSymbol.put(Priority.FALSE, "false");
-        mapTerminalSymbol.put(Priority.BOOLEAN, "boolean");
-        mapTerminalSymbol.put(Priority.INTEGER, "Integer");
-        mapTerminalSymbol.put(Priority.DOUBLE, "Double");
-        mapTerminalSymbol.put(Priority.INT, "int");
-        mapTerminalSymbol.put(Priority.SQRT, "Math.sqrt");
     }
 }

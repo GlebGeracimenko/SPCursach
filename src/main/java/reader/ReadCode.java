@@ -1,5 +1,7 @@
 package reader;
 
+import com.sun.jmx.snmp.EnumRowStatus;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -80,6 +82,9 @@ public class ReadCode {
         if (scanner.hasNextLine()) {
             line = scanner.nextLine();
             lineNumber++;
+            if (!line.equals("") && line.lastIndexOf("{") == -1 && line.lastIndexOf("}") == -1 && line.lastIndexOf(";") == -1) {
+                throw new Error("Не вистачає крапки з комою (" + lineNumber + ", " + (line.length() - 1) + ")");
+            }
             if (!main)
                 syntaxAnaliz();
         } else {
@@ -156,7 +161,19 @@ public class ReadCode {
             } else if (line.startsWith("public static void main(String[] args)")) {
                 main = true;
             } else {
-                throw new Error("Не вірно вказані індетифікатори доступу");
+                int index = line.indexOf("import");
+                int index1 = line.indexOf("public");
+                if (index < 0 && index1 < 0) {
+                    throw new Error("Не вірно вказані індетифікатори доступу (" + lineNumber + ", " + 0 + ").");
+                } else if (index1 < 0 && (line.indexOf("class") >= 0 || line.indexOf("main") >= 0)) {
+                    throw new Error("Не вірно вказані індетифікатори доступу (" + lineNumber + ", " + 0 + ").");
+                } else if (index1 >= 0 && line.indexOf("class") < 0 && line.indexOf("void main") < 0) {
+                    throw new Error("Не вірно вказані індетифікатори доступу (" + lineNumber + ", " + (index1 + 7) + ").");
+                } else if (index1 >= 0 && line.indexOf("static") < 0 && line.indexOf("void main") >= 0) {
+                    throw new Error("Не вірно вказані індетифікатори доступу (" + lineNumber + ", " + (index1 + 7) + ").");
+                } else if (index1 >= 0 && line.indexOf("static") >= 0 && line.indexOf("void main") < 0) {
+                    throw new Error("Не вірно вказані індетифікатори доступу (" + lineNumber + ", " + (line.indexOf("static") + 7) + ").");
+                }
             }
         }
     }

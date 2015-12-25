@@ -5,7 +5,6 @@ import reader.ReadCode;
 import table.TableElement;
 import table.TableList;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +16,9 @@ public class TreeNode {
     private Node root;
 
     public void getTree(String line) {
+        if (line.equals("") || line == null) {
+            return;
+        }
         buildTree(line);
         if (root != null)
             mainParent(root);
