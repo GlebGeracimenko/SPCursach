@@ -9,6 +9,7 @@ import java.util.Scanner;
  */
 public class ReadCode {
 
+    public static boolean flag = true;
     public static int ifCount = 0;
     private static String line;
     private static String cycleString;
@@ -38,33 +39,46 @@ public class ReadCode {
                 }
                 nextLine();
             }
+            System.out.println("Кінець циклу while");
             cycleString = null;
+            flag = true;
         } else {
+            if (line.indexOf("if") != -1) {
+                if (scanner.hasNextLine()) {
+                    line = scanner.nextLine();
+                }
+            }
             while (true) {
                 if (line.indexOf("}") != -1) {
                     count--;
-                    if (count == 0) {
+                    if (!flag && ifCount > 0 && count == ifCount - 1) {
+                        flag = true;
                         break;
                     }
                 }
                 if (line.indexOf("{") != -1) {
                     count++;
                 }
-                if (ifCount > 0 && count == ifCount - 1) {
+                if (count == 0) {
                     break;
                 }
-                nextLine();
+                if (scanner.hasNextLine()) {
+                    line = scanner.nextLine();
+                }
             }
         }
-        ifCount = 0;
     }
 
     public static String nextLine() {
         if (cycleString != null) {
             return cycle();
         }
-        if (scanner.hasNextLine())
+        if (scanner.hasNextLine()) {
             line = scanner.nextLine();
+        } else {
+            line = "END";
+            return line;
+        }
         if (line.indexOf("while") != -1) {
             cycle();
         }
@@ -76,6 +90,7 @@ public class ReadCode {
 
     private static String cycle() {
         if (cycleString == null) {
+            System.out.println("Цикл while:");
             cycleString = line;
             cycleScanner = scanner;
             int count = 1;

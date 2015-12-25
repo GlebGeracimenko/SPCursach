@@ -266,35 +266,54 @@ public class TreeNode {
                                                                    : Integer.parseInt(mas[0]);
             int h = (index = TableList.list.indexOf(mas[2])) != -1 ? (int) TableList.list.get(index).getValue()
                                                                    : Integer.parseInt(mas[2]);
-            boolean b = k != h;
             if (mas[1].equals("==")) {
-                if (k != h)
+                System.out.println("Якщо " + mas[0] + " дорівнює " + mas[2]);
+                if (k != h) {
+                    ReadCode.flag = false;
                     ReadCode.nextBlock();
+                }
             } else if (mas[1].equals(">=")) {
-                if (k < h)
+                System.out.println("Якщо " + mas[0] + " більше дорівнює " + mas[2]);
+                if (k < h) {
+                    ReadCode.flag = false;
                     ReadCode.nextBlock();
+                }
             } else if (mas[1].equals("<=")) {
-                if (k > h)
+                System.out.println("Якщо " + mas[0] + " менше дорівнює " + mas[2]);
+                if (k > h) {
+                    ReadCode.flag = false;
                     ReadCode.nextBlock();
+                }
             } else if (mas[1].equals("!=")) {
-                if (k == h)
+                System.out.println("Якщо " + mas[0] + " не дорівнює " + mas[2]);
+                if (k == h) {
+                    ReadCode.flag = false;
                     ReadCode.nextBlock();
+                }
             } else if (mas[1].equals(">")) {
-                if (k <= h)
+                System.out.println("Якщо " + mas[0] + " більше " + mas[2]);
+                if (k <= h) {
+                    ReadCode.flag = false;
                     ReadCode.nextBlock();
+                }
             } else if (mas[1].equals("<")) {
-                if (k >= h)
+                System.out.println("Якщо " + mas[0] + " менше " + mas[2]);
+                if (k >= h) {
+                    ReadCode.flag = false;
                     ReadCode.nextBlock();
+                }
             }
         } else {
             if (mas[2].equals("=")) {
                 TableList.list.add(new TableElement(MapTermanal.mapSymbolTerminal.get(mas[0]) != null
                         ? MapTermanal.mapSymbolTerminal.get(mas[0]) : 0, mas[1], Integer.parseInt(mas[3])));
+                System.out.println("Змінна " + mas[1] + " тип " + mas[0] + " присвоєння " + mas[3]);
             } else if (mas[1].equals("=")) {
                 int index = TableList.list.indexOf(mas[0]);
                 TableElement element = TableList.list.get(index);
                 element.setValue(Integer.parseInt(mas[2]));
                 TableList.list.set(index, element);
+                System.out.println("Змінна " + mas[0] + " присвоєння " + mas[2]);
             }
         }
         return;
