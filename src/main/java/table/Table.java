@@ -14,6 +14,7 @@ public class Table<T extends TableElement> extends ArrayList<T> {
         for (TableElement element : this) {
             if (element.getName().equals((String) o)) {
                 index = count;
+                return index;
             }
             count++;
         }

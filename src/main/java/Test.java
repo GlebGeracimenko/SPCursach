@@ -28,7 +28,6 @@ public class Test {
             while (iterator.hasNext()) {
                 iterator.next();
             }
-            System.out.println(TableList.list.size() + " => " + s);
         }
 
 //        String s = "int x = (-1 + (int)Math.sqrt(9)) / 2 * 8";//"int d = 10 + 130 - 4 * 8 - 2";

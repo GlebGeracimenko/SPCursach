@@ -9,6 +9,7 @@ import java.util.Scanner;
  */
 public class ReadCode {
 
+    public static int ifCount = 0;
     private static String line;
     private static String cycleString;
     private static Scanner scanner;
@@ -23,7 +24,7 @@ public class ReadCode {
     }
 
     public static void nextBlock() {
-        int count = 0;
+        int count = ifCount;
         if (line.indexOf("while") != -1 && cycleString != null) {
             while (true) {
                 if (line.indexOf("}") != -1) {
@@ -49,12 +50,13 @@ public class ReadCode {
                 if (line.indexOf("{") != -1) {
                     count++;
                 }
+                if (ifCount > 0 && count == ifCount - 1) {
+                    break;
+                }
                 nextLine();
             }
-//            if (line.indexOf("else") != -1) {
-//                nextLine();
-//            }
         }
+        ifCount = 0;
     }
 
     public static String nextLine() {
@@ -65,6 +67,9 @@ public class ReadCode {
             line = scanner.nextLine();
         if (line.indexOf("while") != -1) {
             cycle();
+        }
+        if (line.indexOf("}") != -1 && ifCount > 0) {
+            nextBlock();
         }
         return line;
     }

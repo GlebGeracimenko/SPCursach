@@ -36,6 +36,7 @@ public class TreeNode {
         int index;
         int isLine = -1;
         if (line.indexOf("if") != -1) {
+            ReadCode.ifCount++;
             root = new Node(MapTermanal.mapSymbolTerminal.get("()"), "()", null, null, null);
             root.setLeft(new Node(MapTermanal.mapSymbolTerminal.get("if"), "if", root, null, null));
             line = line.substring(line.indexOf("(") + 1, line.lastIndexOf(")")).trim();
@@ -70,7 +71,7 @@ public class TreeNode {
             root.setLeft(new Node(0, line.substring(0, index), root, null, null));
             line = line.substring(index + 1, line.length()).trim();
             if (line.startsWith("-")) {
-            //////    line = line.replaceAll("\\-\\(", "(-1) * (");
+                line = line.replaceAll("\\-\\(", "(-1) * (");
             }
             root.setRight(new Node(MapTermanal.mapSymbolTerminal.get(line) == null
                     ? 0 : MapTermanal.mapSymbolTerminal.get(line), line, root, null, null));
@@ -208,7 +209,7 @@ public class TreeNode {
                     value = line.substring(w, line.indexOf(")", w));
                     int sqrt;
                     if ((index = TableList.list.indexOf(value)) != -1) {
-                        sqrt = (int)Math.sqrt((Double) TableList.list.get(index).getValue());
+                        sqrt = (int)Math.sqrt(Double.parseDouble(Integer.toString((Integer) TableList.list.get(index).getValue())));
                     } else {
                         sqrt = (int)Math.sqrt(Double.parseDouble(value));
                     }
@@ -218,10 +219,28 @@ public class TreeNode {
                 }
             }
             String mas[] = line.split(" ");
-            int k = (index = TableList.list.indexOf(mas[0])) != -1 ? (int) TableList.list.get(index).getValue()
-                    : Integer.parseInt(mas[0]);
-            int h = (index = TableList.list.indexOf(mas[2])) != -1 ? (int) TableList.list.get(index).getValue()
-                    : Integer.parseInt(mas[2]);
+            int k = 0;
+            int h = 0;
+            if (mas[0].startsWith("-")) {
+                mas[0] = mas[0].trim().substring(1, mas[0].length());
+                index = TableList.list.indexOf(mas[0]);
+                k = -(index != -1 ? (int) TableList.list.get(index).getValue()
+                        : Integer.parseInt(mas[0]));
+            } else {
+                index = TableList.list.indexOf(mas[0]);
+                k = (index != -1 ? (int) TableList.list.get(index).getValue()
+                        : Integer.parseInt(mas[0]));
+            }
+            if (mas[2].startsWith("-")) {
+                mas[2] = mas[2].trim().substring(1, mas[2].length());
+                index = TableList.list.indexOf(mas[2]);
+                h = -(index != -1 ? (int) TableList.list.get(index).getValue()
+                        : Integer.parseInt(mas[2]));
+            } else {
+                index = TableList.list.indexOf(mas[2]);
+                h = (index != -1 ? (int) TableList.list.get(index).getValue()
+                        : Integer.parseInt(mas[2]));
+            }
             if (mas[1].equals("*")) {
                 line = new String(String.valueOf(k * h));
             } else if (mas[1].equals("/")) {
@@ -276,7 +295,6 @@ public class TreeNode {
                 TableElement element = TableList.list.get(index);
                 element.setValue(Integer.parseInt(mas[2]));
                 TableList.list.set(index, element);
-                System.out.println("XXXXXXXXXXXX ============== " + mas[2]);
             }
         }
         return;
