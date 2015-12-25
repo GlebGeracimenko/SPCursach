@@ -11,10 +11,11 @@ public class ReadCode {
 
     public static boolean flag = true;
     public static int ifCount = 0;
-    private static String line;
+    public static String line;
     private static String cycleString;
     private static Scanner scanner;
     private static Scanner cycleScanner;
+    public static int lineNumber = 0;
 
     static {
         try {
@@ -24,7 +25,7 @@ public class ReadCode {
         }
     }
 
-    public static void nextBlock() {
+    public static void nextBlock() throws Exception {
         int count = ifCount;
         if (line.indexOf("while") != -1 && cycleString != null) {
             while (true) {
@@ -45,6 +46,7 @@ public class ReadCode {
         } else {
             if (line.indexOf("if") != -1) {
                 if (scanner.hasNextLine()) {
+                    lineNumber++;
                     line = scanner.nextLine();
                 }
             }
@@ -63,18 +65,20 @@ public class ReadCode {
                     break;
                 }
                 if (scanner.hasNextLine()) {
+                    lineNumber++;
                     line = scanner.nextLine();
                 }
             }
         }
     }
 
-    public static String nextLine() {
+    public static String nextLine() throws Exception {
         if (cycleString != null) {
             return cycle();
         }
         if (scanner.hasNextLine()) {
             line = scanner.nextLine();
+            lineNumber++;
         } else {
             line = "END";
             return line;
@@ -88,13 +92,19 @@ public class ReadCode {
         return line;
     }
 
-    private static String cycle() {
+    private static String cycle() throws Exception {
         if (cycleString == null) {
             System.out.println("Цикл while:");
             cycleString = line;
+            if (line.indexOf("true") != -1) {
+                throw new Exception("Цикл нескінчений, інша частина коду не буде виконана (" + lineNumber + ", " + line.indexOf("true") + ").");
+            } else if (line.indexOf("false") != -1) {
+                throw new Exception("Цикл не є корисним (" + lineNumber + ", " + line.indexOf("false") + ").");
+            }
             cycleScanner = scanner;
             int count = 1;
             while (cycleScanner.hasNextLine()) {
+                lineNumber++;
                 String s = "\n" + cycleScanner.nextLine();
                 cycleString += s;
                 if (s.indexOf("}") != -1) {
@@ -126,6 +136,14 @@ public class ReadCode {
             return line;
         }
         return null;
+    }
+
+    private static void checkCycle() {
+        Scanner scanner = new Scanner(cycleString);
+        String s = scanner.nextLine();
+        s = s.substring(s.indexOf("while") + 5, s.length());
+        s.replaceAll("\\(", "");
+        s.replaceAll("\\)", "");
     }
 
 }

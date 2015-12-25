@@ -31,7 +31,7 @@ public class MapTermanal {
         mapSymbolTerminal.put("false", Priority.FALSE);
         mapSymbolTerminal.put("boolean", Priority.BOOLEAN);
         mapSymbolTerminal.put("Integer", Priority.INTEGER);
-        mapSymbolTerminal.put("Double", Priority.DOUBLE);
+        mapSymbolTerminal.put("double", Priority.DOUBLE);
         mapSymbolTerminal.put("int", Priority.INT);
         mapSymbolTerminal.put("Math.sqrt", Priority.SQRT);
         mapSymbolTerminal.put("()", Priority.PARENTHESIS);

@@ -5,7 +5,7 @@ package tree;
  */
 public interface Iterator {
     boolean hasNext();
-    Node next();
+    Node next() throws Exception;
 //    Node next1();
 //    int getLength();
 //    void setMaxLength(int maxLength);

@@ -5,6 +5,7 @@ import reader.ReadCode;
 import table.TableElement;
 import table.TableList;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class TreeNode {
             TableElement element = null;
             if (index > -1)
                 element = TableList.list.get(index);
-            System.out.println("================>>>>>>>>>>" + (element != null ? element : line));
+            System.out.println("Вивід на екран " + (element != null ? element.getValue() : line));
             return;
         }
         int index;
@@ -100,6 +101,9 @@ public class TreeNode {
         } else if (right == null || right.equals(line) || right.equals("")) {
             root.getParent().setRight(root);
         }
+//        if (line.startsWith("-") && !line.startsWith("-1")) {
+//            line = line.replaceAll("\\-", "-1 * ");
+//        }
         String s = refactorBrackets(line.substring(0, isLine)).trim();
         root.setLeft(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
                 ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, root, null, null));
@@ -172,7 +176,7 @@ public class TreeNode {
                 }
             }
         } else {
-            int index1 = line.indexOf("-");
+            int index1 = line.indexOf("-", 1);
             index1 = index1 == -1 ? Integer.MAX_VALUE : index1;
             if (index1 != Integer.MAX_VALUE && index1 == 0)
                 index1 = Integer.MAX_VALUE;
@@ -197,7 +201,7 @@ public class TreeNode {
         return -1;
     }
 
-    private String rez(String line) throws ClassNotFoundException {
+    private String rez(String line) throws Exception {
         if (line.indexOf("=") != -1 || line.indexOf(">") != -1 || line.indexOf("<") != -1) {
             toTable(line);
         } else {
@@ -207,11 +211,19 @@ public class TreeNode {
                 String value;
                 while ((w = line.indexOf("Math.sqrt(") + 10) >= 10) {
                     value = line.substring(w, line.indexOf(")", w));
-                    int sqrt;
+                    int sqrt = 0;
                     if ((index = TableList.list.indexOf(value)) != -1) {
-                        sqrt = (int)Math.sqrt(Double.parseDouble(Integer.toString((Integer) TableList.list.get(index).getValue())));
+                        if (TableList.list.get(index).getPriorety() == 4) {
+                            sqrt = (int) Math.sqrt(Double.parseDouble(Integer.toString((Integer) TableList.list.get(index).getValue())));
+                        } else if (TableList.list.get(index).getPriorety() == 5) {
+                            sqrt = (int) Math.sqrt(Double.parseDouble(String.valueOf(TableList.list.get(index).getValue())));
+                        }
                     } else {
-                        sqrt = (int)Math.sqrt(Double.parseDouble(value));
+                        try {
+                            sqrt = (int)Math.sqrt(Double.parseDouble(value));
+                        } catch (NumberFormatException e) {
+                            throw new NumberFormatException("З таким ім’ям зміна не існує '" + value + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(value) + ").");
+                        }
                     }
                     String s = line.substring(0, w - 15);
                     String s1 = line.substring(line.indexOf("sqrt(" + value) + 6 + value.length(), line.length());
@@ -219,36 +231,139 @@ public class TreeNode {
                 }
             }
             String mas[] = line.split(" ");
-            int k = 0;
-            int h = 0;
+            Integer k = null;
+            Integer h = null;
+            Double k1 = null;
+            Double h1 = null;
             if (mas[0].startsWith("-")) {
                 mas[0] = mas[0].trim().substring(1, mas[0].length());
                 index = TableList.list.indexOf(mas[0]);
-                k = -(index != -1 ? (int) TableList.list.get(index).getValue()
-                        : Integer.parseInt(mas[0]));
+                if (index != -1 && TableList.list.get(index).getPriorety() == 4) {
+                    k = -(Integer.parseInt(String.valueOf(TableList.list.get(index).getValue())));
+                } else if (index != -1 && TableList.list.get(index).getPriorety() == 5) {
+                    k1 = -(Double.parseDouble(String.valueOf(TableList.list.get(index).getValue())));
+                } else {
+                    if (mas[0].indexOf(".") != -1) {
+                        try {
+                            k1 = -Double.parseDouble(mas[0]);
+                        } catch (NumberFormatException e) {
+                            throw new NumberFormatException("З таким ім’ям зміна не існує '" + mas[0] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[0]) + ").");
+                        }
+                    } else {
+                        try {
+                            k = -Integer.parseInt(mas[0]);
+                        } catch (NumberFormatException e) {
+                            throw new NumberFormatException("З таким ім’ям зміна не існує '" + mas[0] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[0]) + ").");
+                        }
+                    }
+                }
             } else {
                 index = TableList.list.indexOf(mas[0]);
-                k = (index != -1 ? (int) TableList.list.get(index).getValue()
-                        : Integer.parseInt(mas[0]));
+                if (index != -1 && TableList.list.get(index).getPriorety() == 4) {
+                    k = Integer.parseInt(String.valueOf(TableList.list.get(index).getValue()));
+                } else if (index != -1 && TableList.list.get(index).getPriorety() == 5) {
+                    k1 = Double.parseDouble(String.valueOf(TableList.list.get(index).getValue()));
+                } else {
+                    if (mas[0].indexOf(".") != -1) {
+                        try {
+                            k1 = Double.parseDouble(mas[0]);
+                        } catch (NumberFormatException e) {
+                            throw new NumberFormatException("З таким ім’ям зміна не існує '" + mas[0] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[0]) + ").");
+                        }
+                    } else {
+                        try {
+                            k = Integer.parseInt(mas[0]);
+                        } catch (NumberFormatException e) {
+                            //throw new NumberFormatException("З таким ім’ям зміна не існує '" + mas[0] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[0]) + ").");
+                        }
+                    }
+                }
             }
             if (mas[2].startsWith("-")) {
                 mas[2] = mas[2].trim().substring(1, mas[2].length());
                 index = TableList.list.indexOf(mas[2]);
-                h = -(index != -1 ? (int) TableList.list.get(index).getValue()
-                        : Integer.parseInt(mas[2]));
+                if (index != -1 && TableList.list.get(index).getPriorety() == 4) {
+                    h = -(Integer.parseInt(String.valueOf(TableList.list.get(index).getValue())));
+                } else if (index != -1 && TableList.list.get(index).getPriorety() == 5) {
+                    h1 = -(Double.parseDouble(String.valueOf(TableList.list.get(index).getValue())));
+                } else {
+                    if (mas[2].indexOf(".") != -1) {
+                        try {
+                            h1 = -Double.parseDouble(mas[2]);
+                        } catch (NumberFormatException e) {
+                            throw new NumberFormatException("З таким ім’ям зміна не існує '" + mas[2] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[2]) + ").");
+                        }
+                    } else {
+                        try {
+                            h = -Integer.parseInt(mas[2]);
+                        } catch (NumberFormatException e) {
+                            throw new NumberFormatException("З таким ім’ям зміна не існує '" + mas[2] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[2]) + ").");
+                        }
+                    }
+                }
             } else {
                 index = TableList.list.indexOf(mas[2]);
-                h = (index != -1 ? (int) TableList.list.get(index).getValue()
-                        : Integer.parseInt(mas[2]));
+                if (index != -1 && TableList.list.get(index).getPriorety() == 4) {
+                    h = Integer.parseInt(String.valueOf(TableList.list.get(index).getValue()));
+                } else if (index != -1 && TableList.list.get(index).getPriorety() == 5) {
+                    h1 = Double.parseDouble(String.valueOf(TableList.list.get(index).getValue()));
+                } else {
+                    if (mas[2].indexOf(".") != -1) {
+                        try {
+                            h1 = Double.parseDouble(mas[2]);
+                        } catch (NumberFormatException e) {
+                            throw new NumberFormatException("З таким ім’ям зміна не існує '" + mas[2] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[2]) + ").");
+                        }
+                    } else {
+                        try {
+                            h = Integer.parseInt(mas[2]);
+                        } catch (NumberFormatException e) {
+                            throw new NumberFormatException("З таким ім’ям зміна не існує '" + mas[2] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[2]) + ").");
+                        }
+                    }
+                }
             }
+
             if (mas[1].equals("*")) {
-                line = new String(String.valueOf(k * h));
+                if (k != null && h != null) {
+                    line = String.valueOf(k * h);
+                } else if (k != null && h1 != null) {
+                    line = String.valueOf(k * h1);
+                } else if (k1 != null && h1 != null) {
+                    line = String.valueOf(k1 * h1);
+                } else {
+                    line = String.valueOf(k1 * h);
+                }
             } else if (mas[1].equals("/")) {
-                line = new String(String.valueOf(k / h));
+                if (k != null && h != null) {
+                    line = String.valueOf(k / h);
+                } else if (k != null && h1 != null) {
+                    line = String.valueOf(k / h1);
+                } else if (k1 != null && h1 != null) {
+                    line = String.valueOf(k1 / h1);
+                } else {
+                    line = String.valueOf(k1 / h);
+                }
             } else if (mas[1].equals("+")) {
-                line = new String(String.valueOf(k + h));
+                if (k != null && h != null) {
+                    line = String.valueOf(k + h);
+                } else if (k != null && h1 != null) {
+                    line = String.valueOf(k + h1);
+                } else if (k1 != null && h1 != null) {
+                    line = String.valueOf(k1 + h1);
+                } else {
+                    line = String.valueOf(k1 + h);
+                }
             } else if (mas[1].equals("-")) {
-                line = new String(String.valueOf(k - h));
+                if (k != null && h != null) {
+                    line = String.valueOf(k - h);
+                } else if (k != null && h1 != null) {
+                    line = String.valueOf(k - h1);
+                } else if (k1 != null && h1 != null) {
+                    line = String.valueOf(k1 - h1);
+                } else {
+                    line = String.valueOf(k1 - h);
+                }
             } else {
                 line = null;
             }
@@ -257,63 +372,135 @@ public class TreeNode {
         return null;
     }
 
-    private void toTable(String s) throws ClassNotFoundException {
+    private void toTable(String s) throws Exception {
         String mas[] = s.split(" ");
         if (mas[1].equals("==") || mas[1].equals(">=") || mas[1].equals("<=") || mas[1].equals("!=") ||
                 mas[1].equals(">") || mas[1].equals("<")) {
-            int index;
-            int k = (index = TableList.list.indexOf(mas[0])) != -1 ? (int) TableList.list.get(index).getValue()
-                                                                   : Integer.parseInt(mas[0]);
-            int h = (index = TableList.list.indexOf(mas[2])) != -1 ? (int) TableList.list.get(index).getValue()
-                                                                   : Integer.parseInt(mas[2]);
+            Number k = null;
+            Number h = null;
+            int index = TableList.list.indexOf(mas[0]);
+            if (index != -1 && TableList.list.get(index).getPriorety() == 4) {
+                k = Integer.parseInt(String.valueOf(TableList.list.get(index).getValue()));
+            } else if (index != -1 && TableList.list.get(index).getPriorety() == 5) {
+                k = Double.parseDouble(String.valueOf(TableList.list.get(index).getValue()));
+            } else {
+                if (mas[0].indexOf(".") != -1) {
+                    try {
+                        k = Double.parseDouble(mas[0]);
+                    } catch (NumberFormatException e) {
+                        throw new NumberFormatException("З таким ім’ям зміна не існує '" + mas[0] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[0]) + ").");
+                    }
+                } else {
+                    try {
+                        k = Integer.parseInt(mas[0]);
+                    } catch (NumberFormatException e) {
+                        throw new NumberFormatException("З таким ім’ям зміна не існує '" + mas[0] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[0]) + ").");
+                    }
+                }
+            }
+            int index1 = TableList.list.indexOf(mas[2]);
+            if (index1 != -1 && TableList.list.get(index1).getPriorety() == 4) {
+                h = Integer.parseInt(String.valueOf(TableList.list.get(index1).getValue()));
+            } else if (index1 != -1 && TableList.list.get(index1).getPriorety() == 5) {
+                h = Double.parseDouble(String.valueOf(TableList.list.get(index1).getValue()));
+            } else {
+                if (mas[2].indexOf(".") != -1) {
+                    try {
+                        h = Double.parseDouble(mas[2]);
+                    } catch (NumberFormatException e) {
+                        throw new NumberFormatException("З таким ім’ям зміна не існує '" + mas[2] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[2]) + ").");
+                    }
+                } else {
+                    try {
+                        h = Integer.parseInt(mas[2]);
+                    } catch (NumberFormatException e) {
+                        throw new NumberFormatException("З таким ім’ям зміна не існує '" + mas[2] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[2]) + ").");
+                    }
+                }
+            }
             if (mas[1].equals("==")) {
                 System.out.println("Якщо " + mas[0] + " дорівнює " + mas[2]);
-                if (k != h) {
+                if (k.doubleValue() != h.doubleValue()) {
+                    System.out.println("Інакше");
                     ReadCode.flag = false;
                     ReadCode.nextBlock();
                 }
             } else if (mas[1].equals(">=")) {
                 System.out.println("Якщо " + mas[0] + " більше дорівнює " + mas[2]);
-                if (k < h) {
+                if (k.doubleValue() < h.doubleValue()) {
+                    System.out.println("Інакше");
                     ReadCode.flag = false;
                     ReadCode.nextBlock();
                 }
             } else if (mas[1].equals("<=")) {
                 System.out.println("Якщо " + mas[0] + " менше дорівнює " + mas[2]);
-                if (k > h) {
+                if (k.doubleValue() > h.doubleValue()) {
+                    System.out.println("Інакше");
                     ReadCode.flag = false;
                     ReadCode.nextBlock();
                 }
             } else if (mas[1].equals("!=")) {
                 System.out.println("Якщо " + mas[0] + " не дорівнює " + mas[2]);
-                if (k == h) {
+                if (k.doubleValue() == h.doubleValue()) {
+                    System.out.println("Інакше");
                     ReadCode.flag = false;
                     ReadCode.nextBlock();
                 }
             } else if (mas[1].equals(">")) {
                 System.out.println("Якщо " + mas[0] + " більше " + mas[2]);
-                if (k <= h) {
+                if (k.doubleValue() <= h.doubleValue()) {
+                    System.out.println("Інакше");
                     ReadCode.flag = false;
                     ReadCode.nextBlock();
                 }
             } else if (mas[1].equals("<")) {
                 System.out.println("Якщо " + mas[0] + " менше " + mas[2]);
-                if (k >= h) {
+                if (k.doubleValue() >= h.doubleValue()) {
+                    System.out.println("Інакше");
                     ReadCode.flag = false;
                     ReadCode.nextBlock();
                 }
             }
         } else {
             if (mas[2].equals("=")) {
-                TableList.list.add(new TableElement(MapTermanal.mapSymbolTerminal.get(mas[0]) != null
-                        ? MapTermanal.mapSymbolTerminal.get(mas[0]) : 0, mas[1], Integer.parseInt(mas[3])));
+                int index = TableList.list.indexOf(mas[1]);
+                if (index > -1) {
+                    throw new Error("Змінна з таким ім’ям вже існує " + "(" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[1]) + ").");
+                }
+                Integer type = MapTermanal.mapSymbolTerminal.get(mas[0]);
+                if (type == null) {
+                    throw new NullPointerException("Не вірно вказан тип " + "(" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[1]) + ").");
+                }
+
+                if (type == 4) {
+                    try {
+                        TableList.list.add(new TableElement(4, mas[1], Integer.parseInt(mas[3])));
+                    } catch (NumberFormatException e) {
+                        throw new NumberFormatException("Невірне приведення типів: " + mas[3] + "! Рядок номер: " + ReadCode.lineNumber);
+                    }
+                } else if (type == 5) {
+                    TableList.list.add(new TableElement(5, mas[1], Double.parseDouble(mas[3])));
+                } else {
+                    throw new Error("Невірний тип: '" + mas[0] + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[0]) + ").");
+                }
                 System.out.println("Змінна " + mas[1] + " тип " + mas[0] + " присвоєння " + mas[3]);
             } else if (mas[1].equals("=")) {
                 int index = TableList.list.indexOf(mas[0]);
-                TableElement element = TableList.list.get(index);
-                element.setValue(Integer.parseInt(mas[2]));
-                TableList.list.set(index, element);
-                System.out.println("Змінна " + mas[0] + " присвоєння " + mas[2]);
+                if (index == -1) {
+
+                    throw new Error("Змінна '" + mas[0] + "' не об’явленна " + "' (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf(mas[0]) + ").");
+
+                } else {
+                    TableElement element = element = TableList.list.get(index);
+
+                    if (element.getPriorety() == 4) {
+                        element.setValue(Integer.parseInt(mas[2]));
+                    } else if (element.getPriorety() == 5) {
+                        element.setValue(Double.parseDouble(mas[2]));
+                    }
+                    TableList.list.set(index, element);
+                    System.out.println("Змінна " + mas[0] + " присвоєння " + mas[2]);
+                }
             }
         }
         return;
@@ -335,7 +522,7 @@ public class TreeNode {
             return node != null;
         }
 
-        public Node next() {
+        public Node next() throws Exception {
             if (node.getLeft() == previous && previous != null) {
                 previous = node;
                 node = node.getRight() == null ? null : node.getRight();
@@ -444,7 +631,7 @@ public class TreeNode {
             return line;
         }
         int index1, index2;
-        if ((index1 = line.indexOf("(")) != -1 && (index2 = line.lastIndexOf(")")) != -1)
+        if ((index1 = line.indexOf("(")) != -1 && (index2 = line.lastIndexOf(")")) == (line.length() - 1))
             line = line.substring(index1 + 1, index2);
         return line;
     }

@@ -2,9 +2,7 @@ import reader.ReadCode;
 import tree.Iterator;
 import tree.TreeNode;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 
 
 /**
@@ -12,7 +10,7 @@ import java.util.Scanner;
  */
 public class Test {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws Exception {
         String s;
         while ((s = ReadCode.nextLine().trim()) != null) {
             if (s.indexOf("else") == -1 && (s.startsWith("import") || s.startsWith("public") || s.startsWith("}") || s.equals(""))) {
@@ -28,9 +26,5 @@ public class Test {
                 iterator.next();
             }
         }
-//        Scanner scanner = new Scanner(new File("txt.java"));
-//        while (scanner.hasNextLine()) {
-//            System.out.println(scanner.nextLine());
-//        }
     }
 }
