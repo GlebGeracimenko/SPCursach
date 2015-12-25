@@ -13,20 +13,26 @@ import java.util.List;
  */
 public class TreeNode {
 
-    private Node root = new Node();
+    private Node root;
 
     public void getTree(String line) {
         buildTree(line);
-        mainParent(root);
+        if (root != null)
+            mainParent(root);
     }
 
     private void buildTree(String line) {
-//        while (line.indexOf("sqrt") != -1) {
-//            int index = line.indexOf("sqrt(");
-//            String name = line.substring(index + 5, line.indexOf(")", index));
-//            String s = "(int)Math.sqrt(" + name + ")";
-//            line = line.replace(s, name + " * " + name);
-//        }
+        if (line.indexOf("System.out.println") != -1) {
+            line += ";";
+            String s1 = "System.out.println(";
+            line = line.substring(line.indexOf(s1) + s1.length(), line.lastIndexOf(");"));
+            int index = TableList.list.indexOf(line);
+            TableElement element = null;
+            if (index > -1)
+                element = TableList.list.get(index);
+            System.out.println("================>>>>>>>>>>" + (element != null ? element : line));
+            return;
+        }
         int index;
         int isLine = -1;
         if (line.indexOf("if") != -1) {
@@ -38,8 +44,19 @@ public class TreeNode {
             root = root.getRight();
             root.setParent(node);
             buildTree(line);
+        } else if (line.indexOf("while") != -1) {
+            root = new Node(MapTermanal.mapSymbolTerminal.get("()"), "()", null, null, null);
+            root.setLeft(new Node(MapTermanal.mapSymbolTerminal.get("while"), "while", root, null, null));
+            line = line.substring(line.indexOf("(") + 1, line.lastIndexOf(")")).trim();
+            root.setRight(new Node());
+            Node node = root;
+            root = root.getRight();
+            root.setParent(node);
+            buildTree(line);
         } else if ((index = line.indexOf("==")) != -1) {
             builtIfTree(line.trim(), "==", index);
+        } else if ((index = line.indexOf("!=")) != -1) {
+            builtIfTree(line.trim(), "!=", index);
         } else if ((index = line.indexOf(">=")) != -1) {
             builtIfTree(line.trim(), ">=", index);
         } else if ((index = line.indexOf(">")) != -1) {
@@ -61,6 +78,7 @@ public class TreeNode {
             root = root.getRight();
             root.setParent(node);
             TreeLineHelper.FIRST_LINE = line;
+            TreeLineHelper.CHECK = false;
             buildTree(line);
         }
         if (line.equals(TreeLineHelper.FIRST_LINE) && TreeLineHelper.CHECK) {
@@ -178,33 +196,44 @@ public class TreeNode {
         return -1;
     }
 
-    private String rez(String s) throws ClassNotFoundException {
-        if (s.indexOf("=") != -1 || s.indexOf(">") != -1 || s.indexOf("<") != -1) {
-            toTable(s);
+    private String rez(String line) throws ClassNotFoundException {
+        if (line.indexOf("=") != -1 || line.indexOf(">") != -1 || line.indexOf("<") != -1) {
+            toTable(line);
         } else {
-            if (s.indexOf("Math.sqrt") != -1) {
-                int w = s.indexOf("Math.sqrt(") + 10;
-                String value = s.substring(w, s.indexOf(")", w));
-                s.replace("(int)Math.sqrt(" + value + ")", (int) Math.sqrt(Integer.parseInt(value)) + "");
-            }
-            String mas[] = s.split(" ");
             int index;
+            if (line.indexOf("Math.sqrt") != -1) {
+                int w;
+                String value;
+                while ((w = line.indexOf("Math.sqrt(") + 10) >= 10) {
+                    value = line.substring(w, line.indexOf(")", w));
+                    int sqrt;
+                    if ((index = TableList.list.indexOf(value)) != -1) {
+                        sqrt = (int)Math.sqrt((Double) TableList.list.get(index).getValue());
+                    } else {
+                        sqrt = (int)Math.sqrt(Double.parseDouble(value));
+                    }
+                    String s = line.substring(0, w - 15);
+                    String s1 = line.substring(line.indexOf("sqrt(" + value) + 6 + value.length(), line.length());
+                    line = s + sqrt + s1;
+                }
+            }
+            String mas[] = line.split(" ");
             int k = (index = TableList.list.indexOf(mas[0])) != -1 ? (int) TableList.list.get(index).getValue()
                     : Integer.parseInt(mas[0]);
             int h = (index = TableList.list.indexOf(mas[2])) != -1 ? (int) TableList.list.get(index).getValue()
                     : Integer.parseInt(mas[2]);
             if (mas[1].equals("*")) {
-                s = new String(String.valueOf(k * h));
+                line = new String(String.valueOf(k * h));
             } else if (mas[1].equals("/")) {
-                s = new String(String.valueOf(k / h));
+                line = new String(String.valueOf(k / h));
             } else if (mas[1].equals("+")) {
-                s = new String(String.valueOf(k + h));
+                line = new String(String.valueOf(k + h));
             } else if (mas[1].equals("-")) {
-                s = new String(String.valueOf(k - h));
+                line = new String(String.valueOf(k - h));
             } else {
-                s = null;
+                line = null;
             }
-            return s;
+            return line;
         }
         return null;
     }
@@ -218,6 +247,7 @@ public class TreeNode {
                                                                    : Integer.parseInt(mas[0]);
             int h = (index = TableList.list.indexOf(mas[2])) != -1 ? (int) TableList.list.get(index).getValue()
                                                                    : Integer.parseInt(mas[2]);
+            boolean b = k != h;
             if (mas[1].equals("==")) {
                 if (k != h)
                     ReadCode.nextBlock();
@@ -246,6 +276,7 @@ public class TreeNode {
                 TableElement element = TableList.list.get(index);
                 element.setValue(Integer.parseInt(mas[2]));
                 TableList.list.set(index, element);
+                System.out.println("XXXXXXXXXXXX ============== " + mas[2]);
             }
         }
         return;
@@ -371,6 +402,10 @@ public class TreeNode {
     }
 
     public String refactorBrackets(String line) {
+        line = line.trim();
+        if (line.startsWith("(int)Math.sqrt")) {
+            return line;
+        }
         int index1, index2;
         if ((index1 = line.indexOf("(")) != -1 && (index2 = line.lastIndexOf(")")) != -1)
             line = line.substring(index1 + 1, index2);

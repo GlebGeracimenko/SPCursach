@@ -10,7 +10,9 @@ import java.util.Scanner;
 public class ReadCode {
 
     private static String line;
+    private static String cycleString;
     private static Scanner scanner;
+    private static Scanner cycleScanner;
 
     static {
         try {
@@ -22,29 +24,88 @@ public class ReadCode {
 
     public static void nextBlock() {
         int count = 0;
-        while (true) {
-            if (line.indexOf("}") != -1) {
-                count--;
-                if (count == 0) {
-                    break;
+        if (line.indexOf("while") != -1 && cycleString != null) {
+            while (true) {
+                if (line.indexOf("}") != -1) {
+                    count--;
+                    if (count == 0) {
+                        break;
+                    }
                 }
+                if (line.indexOf("{") != -1) {
+                    count++;
+                }
+                nextLine();
             }
-            if (line.indexOf("{") != -1) {
-                count++;
+            cycleString = null;
+        } else {
+            while (true) {
+                if (line.indexOf("}") != -1) {
+                    count--;
+                    if (count == 0) {
+                        break;
+                    }
+                }
+                if (line.indexOf("{") != -1) {
+                    count++;
+                }
+                nextLine();
             }
-            nextLine();
-        }
-        if (line.indexOf("else") != -1) {
-            nextLine();
+//            if (line.indexOf("else") != -1) {
+//                nextLine();
+//            }
         }
     }
 
     public static String nextLine() {
-        String s = null;
+        if (cycleString != null) {
+            return cycle();
+        }
         if (scanner.hasNextLine())
-            s = scanner.nextLine();
-        line = s;
-        return s;
+            line = scanner.nextLine();
+        if (line.indexOf("while") != -1) {
+            cycle();
+        }
+        return line;
+    }
+
+    private static String cycle() {
+        if (cycleString == null) {
+            cycleString = line;
+            cycleScanner = scanner;
+            int count = 1;
+            while (cycleScanner.hasNextLine()) {
+                String s = "\n" + cycleScanner.nextLine();
+                cycleString += s;
+                if (s.indexOf("}") != -1) {
+                    count--;
+                    if (count == 0) {
+                        break;
+                    }
+                }
+                if (s.indexOf("{") != -1) {
+                    count++;
+                }
+            }
+            cycleScanner = null;
+        } else {
+            if (cycleScanner == null) {
+                cycleScanner = new Scanner(cycleString);
+            }
+            String s = "";
+            if (cycleScanner.hasNextLine()) {
+                s = cycleScanner.nextLine();
+            } else {
+                cycleScanner = null;
+            }
+            if (s.equals(line)) {
+                cycle();
+                return line;
+            }
+            line = s;
+            return line;
+        }
+        return null;
     }
 
 }
