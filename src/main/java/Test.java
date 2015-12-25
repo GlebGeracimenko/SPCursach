@@ -2,9 +2,6 @@ import reader.ReadCode;
 import tree.Iterator;
 import tree.TreeNode;
 
-import java.io.FileNotFoundException;
-
-
 /**
  * Created by Gleb Geracimenko on 16.12.2015.
  */
@@ -13,7 +10,7 @@ public class Test {
     public static void main(String[] args) throws Exception {
         String s;
         while ((s = ReadCode.nextLine().trim()) != null) {
-            if (s.indexOf("else") == -1 && (s.startsWith("import") || s.startsWith("public") || s.startsWith("}") || s.equals(""))) {
+            if (s.indexOf("else") == -1 && (s.startsWith("}") || s.equals(""))) {
                 continue;
             } else if (s.startsWith("END")) {
                 break;

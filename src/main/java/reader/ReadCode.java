@@ -16,6 +16,7 @@ public class ReadCode {
     private static Scanner scanner;
     private static Scanner cycleScanner;
     public static int lineNumber = 0;
+    private static boolean main = false;
 
     static {
         try {
@@ -79,6 +80,8 @@ public class ReadCode {
         if (scanner.hasNextLine()) {
             line = scanner.nextLine();
             lineNumber++;
+            if (!main)
+                syntaxAnaliz();
         } else {
             line = "END";
             return line;
@@ -138,12 +141,24 @@ public class ReadCode {
         return null;
     }
 
-    private static void checkCycle() {
-        Scanner scanner = new Scanner(cycleString);
-        String s = scanner.nextLine();
-        s = s.substring(s.indexOf("while") + 5, s.length());
-        s.replaceAll("\\(", "");
-        s.replaceAll("\\)", "");
+    private static void syntaxAnaliz() throws ClassNotFoundException {
+        String line = ReadCode.line.trim();
+        if (!line.equals("")) {
+            if (line.startsWith("import")) {
+                String s = line.substring(line.indexOf("import") + 7, line.length() - 1);
+                Class.forName(s);
+            } else if (line.startsWith("public class")) {
+                String s = line.substring(line.indexOf("public class") + 12, line.lastIndexOf("{"));
+                String[] mas = s.trim().split(" ");
+                if (mas.length > 1) {
+                    throw new Error("Класс не може мати назву більше одного слова (" + lineNumber + ", " + line.indexOf(mas[1]) + ")");
+                }
+            } else if (line.startsWith("public static void main(String[] args)")) {
+                main = true;
+            } else {
+                throw new Error("Не вірно вказані індетифікатори доступу");
+            }
+        }
     }
 
 }
