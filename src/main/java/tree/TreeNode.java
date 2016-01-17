@@ -134,7 +134,7 @@ public class TreeNode {
         String s = line.substring(0, index).trim();
         root.setLeft(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
                 ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, root, null, null));
-        s = line.substring(index + 2, line.length()).trim();
+        s = line.substring(line.indexOf(value) + value.length(), line.length()).trim();
         root.setRight(new Node(MapTermanal.mapSymbolTerminal.get(s) == null
                 ? 0 : MapTermanal.mapSymbolTerminal.get(s), s, root, null, null));
     }
@@ -422,6 +422,16 @@ public class TreeNode {
             }
             if (mas[1].equals("==")) {
                 System.out.println("Якщо " + mas[0] + " дорівнює " + mas[2]);
+                if (ReadCode.line.indexOf("while") >= 0) {
+                    if (index < 0 && index1 < 0) {
+                        boolean check = (k.doubleValue() == h.doubleValue()) ? true : false;
+                        if (check) {
+                            throw new Exception("Цикл нескінчений, інша частина коду не буде виконана (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf("(") + ").");
+                        } else {
+                            throw new Exception("Цикл не є корисним (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf("(") + ").");
+                        }
+                    }
+                }
                 if (k.doubleValue() != h.doubleValue()) {
                     System.out.println("Інакше");
                     ReadCode.flag = false;
@@ -429,6 +439,16 @@ public class TreeNode {
                 }
             } else if (mas[1].equals(">=")) {
                 System.out.println("Якщо " + mas[0] + " більше дорівнює " + mas[2]);
+                if (ReadCode.line.indexOf("while") >= 0) {
+                    if (index < 0 && index1 < 0) {
+                        boolean check = (k.doubleValue() >= h.doubleValue()) ? true : false;
+                        if (check) {
+                            throw new Exception("Цикл нескінчений, інша частина коду не буде виконана (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf("(") + ").");
+                        } else {
+                            throw new Exception("Цикл не є корисним (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf("(") + ").");
+                        }
+                    }
+                }
                 if (k.doubleValue() < h.doubleValue()) {
                     System.out.println("Інакше");
                     ReadCode.flag = false;
@@ -436,6 +456,16 @@ public class TreeNode {
                 }
             } else if (mas[1].equals("<=")) {
                 System.out.println("Якщо " + mas[0] + " менше дорівнює " + mas[2]);
+                if (ReadCode.line.indexOf("while") >= 0) {
+                    if (index < 0 && index1 < 0) {
+                        boolean check = (k.doubleValue() <= h.doubleValue()) ? true : false;
+                        if (check) {
+                            throw new Exception("Цикл нескінчений, інша частина коду не буде виконана (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf("(") + ").");
+                        } else {
+                            throw new Exception("Цикл не є корисним (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf("(") + ").");
+                        }
+                    }
+                }
                 if (k.doubleValue() > h.doubleValue()) {
                     System.out.println("Інакше");
                     ReadCode.flag = false;
@@ -443,6 +473,16 @@ public class TreeNode {
                 }
             } else if (mas[1].equals("!=")) {
                 System.out.println("Якщо " + mas[0] + " не дорівнює " + mas[2]);
+                if (ReadCode.line.indexOf("while") >= 0) {
+                    if (index < 0 && index1 < 0) {
+                        boolean check = (k.doubleValue() != h.doubleValue()) ? true : false;
+                        if (check) {
+                            throw new Exception("Цикл нескінчений, інша частина коду не буде виконана (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf("(") + ").");
+                        } else {
+                            throw new Exception("Цикл не є корисним (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf("(") + ").");
+                        }
+                    }
+                }
                 if (k.doubleValue() == h.doubleValue()) {
                     System.out.println("Інакше");
                     ReadCode.flag = false;
@@ -450,6 +490,16 @@ public class TreeNode {
                 }
             } else if (mas[1].equals(">")) {
                 System.out.println("Якщо " + mas[0] + " більше " + mas[2]);
+                if (ReadCode.line.indexOf("while") >= 0) {
+                    if (index < 0 && index1 < 0) {
+                        boolean check = (k.doubleValue() > h.doubleValue()) ? true : false;
+                        if (check) {
+                            throw new Exception("Цикл нескінчений, інша частина коду не буде виконана (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf("(") + ").");
+                        } else {
+                            throw new Exception("Цикл не є корисним (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf("(") + ").");
+                        }
+                    }
+                }
                 if (k.doubleValue() <= h.doubleValue()) {
                     System.out.println("Інакше");
                     ReadCode.flag = false;
@@ -457,6 +507,16 @@ public class TreeNode {
                 }
             } else if (mas[1].equals("<")) {
                 System.out.println("Якщо " + mas[0] + " менше " + mas[2]);
+                if (ReadCode.line.indexOf("while") >= 0) {
+                    if (index < 0 && index1 < 0) {
+                        boolean check = (k.doubleValue() < h.doubleValue()) ? true : false;
+                        if (check) {
+                            throw new Exception("Цикл нескінчений, інша частина коду не буде виконана (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf("(") + ").");
+                        } else {
+                            throw new Exception("Цикл не є корисним (" + ReadCode.lineNumber + ", " + ReadCode.line.indexOf("(") + ").");
+                        }
+                    }
+                }
                 if (k.doubleValue() >= h.doubleValue()) {
                     System.out.println("Інакше");
                     ReadCode.flag = false;
@@ -600,6 +660,9 @@ public class TreeNode {
             while ((w = line.indexOf("Math.sqrt(") + 10) >= 10) {
                 value = line.substring(w, line.indexOf(")", w));
                 value = "(int)Math.sqrt(" + value + ")";
+                String c1 = line.substring(0, line.indexOf("(int)") + 5);
+                String c2 = line.substring(line.indexOf("Math"), line.length());
+                line = c1 + c2;
                 String s = line.substring(0, line.indexOf(value));
                 String s1 = line.substring(line.indexOf(value) + value.length(), line.length());
                 String s2 = "";
@@ -629,7 +692,8 @@ public class TreeNode {
 
     public String refactorBrackets(String line) {
         line = line.trim();
-        if (line.startsWith("(int)Math.sqrt")) {
+        if (line.startsWith("(int)") && line.indexOf("Math.sqrt") >= 0) {
+            line = line.replaceAll(" ", "");
             return line;
         }
         int index1, index2;

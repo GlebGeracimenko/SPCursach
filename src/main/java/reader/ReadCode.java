@@ -1,7 +1,5 @@
 package reader;
 
-import com.sun.jmx.snmp.EnumRowStatus;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -19,6 +17,7 @@ public class ReadCode {
     private static Scanner cycleScanner;
     public static int lineNumber = 0;
     private static boolean main = false;
+    private static boolean whileBool = false;
 
     static {
         try {
@@ -31,6 +30,7 @@ public class ReadCode {
     public static void nextBlock() throws Exception {
         int count = ifCount;
         if (line.indexOf("while") != -1 && cycleString != null) {
+            whileBool = false;
             while (true) {
                 if (line.indexOf("}") != -1) {
                     count--;
@@ -45,34 +45,62 @@ public class ReadCode {
             }
             System.out.println("Кінець циклу while");
             cycleString = null;
+            cycleScanner = null;
             flag = true;
         } else {
             if (line.indexOf("if") != -1) {
                 if (scanner.hasNextLine()) {
-                    lineNumber++;
-                    line = scanner.nextLine();
+                    if (cycleString == null) {
+                        lineNumber++;
+                        line = scanner.nextLine();
+                    } else {
+                        line = cycleScanner.nextLine();
+                    }
                 }
             }
             while (true) {
-                if (line.indexOf("}") != -1) {
-                    count--;
-                    if (!flag && ifCount > 0 && count == ifCount - 1) {
-                        flag = true;
+                if (cycleScanner == null) {
+                    if (line.indexOf("}") != -1) {
+                        count--;
+                        if (!flag && ifCount > 0 && count == ifCount - 1) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (line.indexOf("{") != -1) {
+                        count++;
+                    }
+                    if (count == 0) {
                         break;
                     }
-                }
-                if (line.indexOf("{") != -1) {
-                    count++;
-                }
-                if (count == 0) {
-                    break;
-                }
-                if (scanner.hasNextLine()) {
-                    lineNumber++;
-                    line = scanner.nextLine();
+                    if (scanner.hasNextLine()) {
+                        if (cycleScanner == null)
+                            lineNumber++;
+                        line = scanner.nextLine();
+                    }
+                } else {
+                    if (line.indexOf("}") != -1) {
+                        count--;
+                        if (!flag && ifCount > 0 && count == ifCount - 1) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (line.indexOf("{") != -1) {
+                        count++;
+                    }
+                    if (count == 0) {
+                        break;
+                    }
+                    if (scanner.hasNextLine()) {
+                        if (cycleScanner == null)
+                            lineNumber++;
+                        line = cycleScanner.nextLine();
+                    }
                 }
             }
         }
+        ifCount = count;
     }
 
     public static String nextLine() throws Exception {
@@ -103,6 +131,7 @@ public class ReadCode {
     private static String cycle() throws Exception {
         if (cycleString == null) {
             System.out.println("Цикл while:");
+            whileBool = true;
             cycleString = line;
             if (line.indexOf("true") != -1) {
                 throw new Exception("Цикл нескінчений, інша частина коду не буде виконана (" + lineNumber + ", " + line.indexOf("true") + ").");
@@ -136,11 +165,17 @@ public class ReadCode {
             } else {
                 cycleScanner = null;
             }
-            if (s.equals(line)) {
+            if (s.equals(line) && whileBool) {
                 cycle();
                 return line;
             }
             line = s;
+            if (!line.equals("") && line.lastIndexOf("{") == -1 && line.lastIndexOf("}") == -1 && line.lastIndexOf(";") == -1) {
+                throw new Error("Не вистачає крапки з комою (" + lineNumber + ", " + (line.length() - 1) + ")");
+            }
+            if (line.indexOf("}") != -1 && ifCount > 0) {
+                nextBlock();
+            }
             return line;
         }
         return null;
@@ -175,6 +210,30 @@ public class ReadCode {
                     throw new Error("Не вірно вказані індетифікатори доступу (" + lineNumber + ", " + (line.indexOf("static") + 7) + ").");
                 }
             }
+        }
+    }
+
+    public static void checkBraces() throws FileNotFoundException {
+        Scanner scanner = new Scanner(new File("txt.java"));
+        int lineCount = 0;
+        int count = 0;
+        boolean check = true;
+        String s = "";
+        while (scanner.hasNextLine()) {
+            lineCount++;
+            s = scanner.nextLine();
+            if (s.indexOf("{") >= 0) {
+                count++;
+            }
+            if (s.indexOf("}") >= 0) {
+                count--;
+            }
+            if (count < 0) {
+                check = false;
+            }
+        }
+        if (!check || count > 0) {
+            throw new Error("Невірно розтавлені фігурні дужки (" + lineCount + ", " + s.indexOf("}") + ")");
         }
     }
 
